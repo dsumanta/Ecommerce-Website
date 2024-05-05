@@ -6,6 +6,23 @@ import {Link} from 'react-router-dom'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [data,setData] = useState({
+    email:"",
+    password:""
+  })
+  const onChangeHandleer=(e)=>{
+    const {name,value} = e.target
+    setData((prev)=>{
+      return {
+        ...prev,
+        [name]:value
+      }
+    })
+  }
+  console.log("login data",data)
+  const handleSubmit= (e)=>{
+       e.preventDefault()
+  }
   return (
     <section id="login">
       <div className=" mx-auto container p-4">
@@ -13,7 +30,7 @@ const Login = () => {
           <div className=" w-20 h-20  mx-auto">
             <img src={signInLogo} alt="login Icon" />
           </div>
-          <form action="">
+          <form onSubmit={handleSubmit} >
             <div className=" grid">
               <label htmlFor="">Email</label>
               <div className=" bg-slate-100 p-2">
@@ -21,8 +38,10 @@ const Login = () => {
                   type="email"
                   placeholder="Enter your Email"
                   className=" h-full w-full outline-none bg-transparent"
-                  name=""
-                  id=""
+                  onChange={onChangeHandleer}
+                  value={data.email}
+                  name="email"
+                
                 />
               </div>
             </div>
@@ -33,8 +52,10 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   className="appearance-none  h-full w-full outline-none bg-transparent"
-                  name=""
-                  id=""
+                  name="password"
+                  value={data.value}
+                  onChange={onChangeHandleer}
+                  
                 />
                 <div
                   className=" cursor-pointer"
