@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import signInLogo from "../assest/signin.gif";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImageTobase64 from "../Helper/ImageToBase64";
+import { SummeryAPI } from "../Common/ApiEndPoint";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
@@ -25,8 +28,28 @@ const SignUp = () => {
     });
   };
   console.log("login data", data);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (data.password === data.confirmPassword) {
+      const dataResponse = await fetch(SummeryAPI.signUp.URL, {
+        method: SummeryAPI.signUp.method,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const dataApi = await dataResponse.json();
+      if (dataApi.success) {
+        toast.success(dataApi["message"]);
+        navigate("/login");
+      }
+      if (dataApi.Error) {
+        toast.error(dataApi["message"]);
+      }
+    } else {
+      toast.error("Password and confirm password must be matched");
+    }
   };
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
@@ -44,7 +67,7 @@ const SignUp = () => {
         <div className=" bg-white w-full p-5 max-w-sm mx-auto rounded ">
           <div className=" w-20 h-20  mx-auto rounded-full relative overflow-hidden">
             <div>
-              <img src={data.profilePic ||signInLogo} alt="login Icon" />
+              <img src={data.profilePic || signInLogo} alt="login Icon" />
             </div>
             <form>
               <label>
