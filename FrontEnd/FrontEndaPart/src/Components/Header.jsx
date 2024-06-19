@@ -65,7 +65,7 @@ const Header = () => {
               )}
             </div>
             {displayMenu && (
-              <div className=" absolute bottom-0 top-11 h-fit p-2 bg-white shadow-lg " >
+              <div className=" absolute bottom-0 top-11 h-fit p-2 hidden md:block bg-white shadow-lg " >
                 <nav>
                   <Link
                     to={"/admin-pannel"}

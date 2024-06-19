@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
         reuired:true
     },
     password:String,
-    profilePic:String
+    profilePic:String,
+    role:String
 },{timestamps:true})
 
 const userModel= mongoose.model("user",userSchema)
