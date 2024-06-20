@@ -8,6 +8,7 @@ import { SummeryAPI } from "./Common/ApiEndPoint";
 import Context from "./Context/AuthContext";
 import {useDispatch} from 'react-redux'
 import { setUserDetails } from "./store/UserSlice";
+import '../src/App.css'
 
 function App() {
   const dispatch = useDispatch();

@@ -15,5 +15,13 @@ export const SummeryAPI = {
     logout_user : {
         URL:`${backEndDomain}/api/userLogout`,
         method:"get"
+    },
+    allUser : {
+        URL:`${backEndDomain}/api/all-user`,
+        method:'get'
+    },
+    updateUser:{
+        URL:`${backEndDomain}/api/update-user`,
+        method:"post"
     }
 }
