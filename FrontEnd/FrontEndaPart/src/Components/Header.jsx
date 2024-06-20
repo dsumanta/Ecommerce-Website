@@ -8,6 +8,7 @@ import { SummeryAPI } from "../Common/ApiEndPoint";
 import { toast } from "react-toastify";
 import { setUserDetails } from "../store/UserSlice";
 import { useState } from "react";
+import Rule from "../Common/Rule";
 
 const Header = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -53,26 +54,33 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-7">
           <div className=" relative group flex justify-center">
-            <div className="text-3xl cursor-pointer" onClick={()=>setDisplayMenu(prev=>!prev)} >
-              {user?.profilePic ? (
-                <img
-                  src={user?.profilePic}
-                  alt={user?.name}
-                  className=" w-10 h-10 rounded-full"
-                />
-              ) : (
-                <FaRegCircleUser />
-              )}
-            </div>
+            {user?._id && (
+              <div
+                className="text-3xl cursor-pointer"
+                onClick={() => setDisplayMenu((prev) => !prev)}
+              >
+                {user?.profilePic ? (
+                  <img
+                    src={user?.profilePic}
+                    alt={user?.name}
+                    className=" w-10 h-10 rounded-full"
+                  />
+                ) : (
+                  <FaRegCircleUser />
+                )}
+              </div>
+            )}
             {displayMenu && (
-              <div className=" absolute bottom-0 top-11 h-fit p-2 hidden md:block bg-white shadow-lg " >
+              <div className=" absolute bottom-0 top-11 h-fit p-2 hidden md:block bg-white shadow-lg ">
                 <nav>
-                  <Link
-                    to={"/admin-pannel"}
-                    className=" whitespace-nowrap hover:bg-slate-100"
-                  >
-                    Admin Pannel
-                  </Link>
+                  {user?.role === Rule.ADMIN && (
+                    <Link
+                      to={"/admin-pannel/all-product"}
+                      className=" whitespace-nowrap hover:bg-slate-100"
+                    >
+                      Admin Pannel
+                    </Link>
+                  )}
                 </nav>
               </div>
             )}

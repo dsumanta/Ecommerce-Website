@@ -7,6 +7,13 @@ import ChangrUserRule from "../Components/ChangrUserRule";
 
 function AllUser() {
   const [allUser, setAllUser] = useState([]);
+  const [OpenUpdateUser, setOpenUpdateUser] = useState(false);
+  const [updatedDetails, setUpdatedDetails] = useState({
+    email: "",
+    name: "",
+    role: "",
+    _id:""
+  });
   const fecthAllUser = async () => {
     console.log("Fetch all user");
     const fetchData = await fetch(SummeryAPI.allUser.URL, {
@@ -29,7 +36,7 @@ function AllUser() {
     <div>
       <table className=" w-full userTable">
         <thead>
-          <tr>
+          <tr className=" bg-black text-white">
             <th>Sr.</th>
             <th>Name</th>
             <th>Email</th>
@@ -48,7 +55,13 @@ function AllUser() {
                 <td>{el?.role}</td>
                 <td>{moment(el.updatedAt).format("ll")}</td>
                 <td>
-                  <button className=" bg-green-100 p-2 rounded-full hover:bg-green-500" >
+                  <button
+                    className=" bg-green-100 p-2 rounded-full hover:bg-green-500"
+                    onClick={() => {
+                      setUpdatedDetails(el)
+                      setOpenUpdateUser(true)
+                    }}
+                  >
                     <MdModeEdit />
                   </button>
                 </td>
@@ -57,7 +70,16 @@ function AllUser() {
           })}
         </tbody>
       </table>
-      <ChangrUserRule/>
+      {OpenUpdateUser && (
+        <ChangrUserRule
+          onClose={() => setOpenUpdateUser(false)}
+          name={updatedDetails.name}
+          email={updatedDetails.email}
+          role={updatedDetails.role}
+          userId={updatedDetails._id}
+          callFunction = {fecthAllUser}
+        />
+      )}
     </div>
   );
 }
