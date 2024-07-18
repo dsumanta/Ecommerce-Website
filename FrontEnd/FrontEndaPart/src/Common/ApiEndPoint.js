@@ -23,5 +23,21 @@ export const SummeryAPI = {
     updateUser:{
         URL:`${backEndDomain}/api/update-user`,
         method:"post"
+    },
+    uploadProduct:{
+        URL:`${backEndDomain}/api/upload-product`,
+        method:"post"
+    },
+    getAllProduct:{
+        URL:`${backEndDomain}/api/get-product`,
+        method:"get"
+    },
+    updateProduct:{
+        URL:`${backEndDomain}/api/update-product`,
+        method:"post"
+    },
+    getProductByCatagory:{
+         URL:`${backEndDomain}/api/get-productCatagory`,
+        method:"get"
     }
 }
