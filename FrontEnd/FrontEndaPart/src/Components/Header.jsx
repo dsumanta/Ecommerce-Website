@@ -71,7 +71,7 @@ const Header = () => {
               </div>
             )}
             {displayMenu && (
-              <div className=" absolute bottom-0 top-11 h-fit p-2 hidden md:block bg-white shadow-lg ">
+              <div onClick={()=>setDisplayMenu((prev)=>!prev)} className=" absolute bottom-0 top-11 h-fit p-2 hidden md:block bg-white shadow-lg ">
                 <nav>
                   {user?.role === Rule.ADMIN && (
                     <Link

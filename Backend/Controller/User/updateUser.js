@@ -1,6 +1,6 @@
-const userModel = require("../Model/userModel");
+const userModel = require("../../Model/userModel");
 
-async function updateUser(req,res) {
+async function updateUser(req, res) {
   try {
     const sessionUser = req.userId;
     const { userId, name, email, role } = req.body;
@@ -9,9 +9,9 @@ async function updateUser(req,res) {
       ...(name && { name: name }),
       ...(role && { role: role }),
     };
-    
+
     const user = await userModel.findById(sessionUser);
-    console.log("user->",userId)
+    console.log("user->", userId);
     const updateUserById = await userModel.findByIdAndUpdate(userId, payload);
 
     res.json({

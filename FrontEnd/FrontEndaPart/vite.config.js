@@ -1,7 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import {  loadEnv } from 'vite'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => {
+
+  const env = loadEnv(mode, process.cwd(),'');
+  
+  return {  
+    define: {
+      ...Object.keys(env).reduce((prev, key) => {
+        prev[`process.env.${key}`] = JSON.stringify(env[key])
+        return prev
+      }, {}),
+    },
+    plugins: [react()]
+  }
 })
+
+
+// define: {
+//   process.env.SOME_ENV : `"${process.env.SOME_ENV}"`
+// }

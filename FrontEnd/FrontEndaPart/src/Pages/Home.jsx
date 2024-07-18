@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import CatagoryList from "../Components/CatagoryList";
+import  BannerProduct  from "../Components/BannerProduct";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div>
+      <CatagoryList />
+      <BannerProduct />
+    </div>
+  );
+};
 
-export default Home
+export default Home;

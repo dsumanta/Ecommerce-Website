@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IoClose } from "react-icons/io5";
 import productCatagory from "../Helper/ProductCatagory";
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -7,18 +7,20 @@ import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import { SummeryAPI } from "../Common/ApiEndPoint";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
-function UploadComponent({ onClose,fetchData }) {
+const AdminEditProduct = ({ onClose, EditData,FetchData }) => {
   const [fullScreeImage, setFullScreenImage] = useState("");
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [data, setData] = useState({
-    productName: "",
-    brandName: "",
-    catagory: "",
-    productImage: [],
-    desription: "",
-    price: "",
-    sellingPrice: "",
+    ...EditData,
+    productName: EditData?.productName,
+    brandName: EditData?.brandName,
+    catagory: EditData?.catagory,
+    productImage: EditData?.productImage || [],
+    desription: EditData?.desription,
+    price: EditData?.price,
+    sellingPrice: EditData?.sellingPrice,
   });
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -59,8 +61,8 @@ function UploadComponent({ onClose,fetchData }) {
   // upload product
   const handlesubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(SummeryAPI.uploadProduct.URL, {
-      method: SummeryAPI.uploadProduct.method,
+    const response = await fetch(SummeryAPI.updateProduct.URL, {
+      method: SummeryAPI.updateProduct.method,
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -73,18 +75,17 @@ function UploadComponent({ onClose,fetchData }) {
     if (responseData.success) {
       toast.success(responseData.message);
       onClose();
-      fetchData();
+      FetchData();
     }
-    if (responseData.error) {
+    if (responseData.Error) {
       toast.error(responseData.message);
     }
   };
-
   return (
     <div className=" absolute w-full h-full bg-slate-200 bg-opacity-35 bottom-0 top-0 left-0 right-0 flex justify-center items-center">
       <div className=" bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className=" flex justify-between items-center">
-          <h2 className=" text-lg font-bold"> Upload Product</h2>
+          <h2 className=" text-lg font-bold"> Edit Product</h2>
           <div
             className=" w-fit ml-auto text-2xl hover:text-red-600 cursor-pointer"
             onClick={onClose}
@@ -96,6 +97,7 @@ function UploadComponent({ onClose,fetchData }) {
           action=""
           className=" grid p-4 gap-3 pb-5 overflow-y-scroll h-full"
           onSubmit={handlesubmit}
+          noValidate
         >
           <label htmlFor="productName">Product Name :</label>
           <input
@@ -131,7 +133,8 @@ function UploadComponent({ onClose,fetchData }) {
             name="catagory"
             onChange={handleOnChange}
             required
-          >
+          > 
+            <option value={""}>Select Catagory</option>
             {productCatagory.map((el, index) => {
               return (
                 <option value={el.value} key={index + el.value}>
@@ -229,7 +232,7 @@ function UploadComponent({ onClose,fetchData }) {
             type="submit"
             className=" px-3 py-1 bg-red-600 text-white mb-10 hover:bg-red-700"
           >
-            Upload Product
+            Update Product
           </button>
         </form>
       </div>
@@ -243,6 +246,6 @@ function UploadComponent({ onClose,fetchData }) {
       )}
     </div>
   );
-}
+};
 
-export default UploadComponent;
+export default AdminEditProduct;
