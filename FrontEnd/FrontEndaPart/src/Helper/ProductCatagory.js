@@ -42,7 +42,7 @@ const productCatagory = [
   {
     id: 9,
     label: "Speaker",
-    value: "airpodes",
+    value: "speaker",
   },
   {
     id: 10,
