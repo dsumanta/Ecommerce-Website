@@ -8,6 +8,7 @@ import AdminPanel from '../Pages/AdminPanel'
 import Alluser from '../Pages/AllUser'
 import AllProducts from '../Pages/AllProducts'
 import CatagoryProduct from '../Pages/CatagoryProduct'
+import ProductDetails from '../Pages/ProductDetails'
 
 const routes = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const routes = createBrowserRouter([
             {
                 path:'catagory-product/:catagoryName',
                 element:<CatagoryProduct/>
+            },
+            {
+               path:'product/:id',
+               element:<ProductDetails/>
             },
             {
                 path:'admin-pannel',
