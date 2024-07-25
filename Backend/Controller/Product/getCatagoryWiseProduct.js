@@ -3,7 +3,8 @@ const productModel = require("../../Model/productModel");
 const catagoryWiseProduct = async(req,res)=>{
    try{
      const {catagory} = req?.body || req?.query
-     const product = productModel.find({catagory})
+     const product = await productModel.find({catagory})
+     console.log("I am here ok")
      res.json({
         message:"Product by catagory",
         data:product,

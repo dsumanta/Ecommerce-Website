@@ -7,7 +7,7 @@ const GetCatagoryWiseProduct = async(Catagory)=>{
         headers:{
             'content-type':'application/json'
         },
-        body:JSON.stringify({catagoty:Catagory})
+        body:JSON.stringify({catagory:Catagory})
     })
     const dataResponse = await response.json();
     console.log("product_catagory-wise->",dataResponse)

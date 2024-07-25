@@ -44,4 +44,12 @@ export const SummeryAPI = {
     URL: `${backEndDomain}/api/catagoryWise-product`,
     method: "post",
   },
+  productdetails:{
+    URL: `${backEndDomain}/api/product-details`,
+    method: "post",
+  },
+  addToCart:{
+    URL: `${backEndDomain}/api/addToacrt`,
+    method: "post",
+  }
 };
