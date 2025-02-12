@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import GetCatagoryWiseProduct from "../Helper/GetCatagoryWiseProduct";
 import DisplayINDCurrency from "../Helper/DisplayINDCurrency";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AddToCart from "../Helper/AddToCart";
+import Context from "../Context/AuthContext";
 
 const VerticalCardProduct = ({ catagory, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const loadingList = new Array(13).fill(null);
   const [scroll, setScroll] = useState(0);
+  const {fetchAddToCartProduct} = useContext(Context)
   const scrollElement = useRef();
   const fetchData = async () => {
     setLoading(true);
@@ -29,7 +31,10 @@ const VerticalCardProduct = ({ catagory, heading }) => {
   const scrollLeft = () => {
     scrollElement.current.scrollLeft -= 300;
   };
-
+  const handleAddToCart = async (e,id)=>{
+     await AddToCart(e,id);
+     fetchAddToCartProduct()
+  }
   return (
     <div className=" container mx-auto px-4 my-6 relative">
       <h2 className=" text-2xl  font-semibold py-4">{heading}</h2>
@@ -79,7 +84,7 @@ const VerticalCardProduct = ({ catagory, heading }) => {
                       {DisplayINDCurrency(product.price)}
                     </p>
                   </div>
-                  <button onClick={(e)=>AddToCart(e,product._id)} className=" text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full">
+                  <button onClick={(e)=>handleAddToCart(e,product._id)} className=" text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full">
                     Add To Cart
                   </button>
                 </div>
