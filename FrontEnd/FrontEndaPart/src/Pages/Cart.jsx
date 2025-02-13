@@ -45,6 +45,9 @@ function Cart() {
       // setData(responseData.data);
     }
   };
+  useEffect(()=>{
+   
+  },[cartUpdateDetails])
   useEffect(() => {
     fetchData();
   }, []);

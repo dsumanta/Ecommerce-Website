@@ -19,9 +19,8 @@ const addToCart = async(req,res)=>{
         quantity:1,
         userId:currentUserId
        }
-       const newAddTocart = new cartModel(payLoad)
-       const saveProduct = await newAddTocart.save()
-
+       const updateCart= 
+       
        res.json({
         message:"Product Added to cart",
         data:saveProduct,
