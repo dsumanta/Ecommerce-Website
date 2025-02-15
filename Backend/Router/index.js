@@ -39,5 +39,5 @@ router.post("/catagoryWise-product",catagoryWiseProduct)
 router.post("/product-details",getProductDetails)
 router.post("/addToacrt",AuthToken,addToCart)
 router.get("/countProductIncart",AuthToken,countProductInCart)
-router.get("/cartUpdate",AuthToken,updateCart)  
+router.post("/cartUpdate",AuthToken,updateCart)  
 module.exports = router;

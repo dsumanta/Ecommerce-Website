@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DisplayINDCurrency from "../Helper/DisplayINDCurrency";
+import updateCart from "../Helper/updateCart";
+import Context from "../Context/AuthContext";
 
-function CartCheckout({ cartData, totalAmount, setCartdata }) {
-  const [cartDetails, setCartDetails] = useState(cartData);
-  const handleChange = (e, index) => {
+function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
+  const {fetchAddToCartProduct} = useContext(Context);
+  console.log("cartDetailsrender",cartDetails)
+  const handleChange = async (e, index) => {
     // Add index parameter
     const { name, value } = e.target; 
+    if(name==="quantity" && value<=0){
+      return
+    }
     const deatilToUpdateIncart = {
       productId: cartDetails[index]?._id,
       quantity: value,
     };
-    setCartdata(deatilToUpdateIncart)
+    await updateCart(deatilToUpdateIncart)
     setCartDetails((prevCartDetails) => {
       return prevCartDetails.map((item, i) => {
         if (i === index) {
@@ -21,7 +27,24 @@ function CartCheckout({ cartData, totalAmount, setCartdata }) {
       });
     });
   };
-  console.log("cartProduct", cartDetails);
+  const handlclick =async (e,index)=>{
+    const productToremove= {
+      productId: cartDetails[index]?._id,
+      quantity: 0,
+    }
+
+    await updateCart(productToremove)
+    fetchAddToCartProduct()
+    setCartDetails((prevCartDetails) => {
+      return prevCartDetails.map((item, i) => {
+        if (i === index) {
+          return { ...item, ["quantity"]: 0 };
+        } else {
+          return item;
+        }
+      });
+    });
+  }
   return (
     <div>
       <div
@@ -75,7 +98,7 @@ function CartCheckout({ cartData, totalAmount, setCartdata }) {
                           className="-my-6 divide-y divide-gray-200"
                         >
                           {cartDetails?.map((item, index) => {
-                            return (
+                            return item?.["quantity"]!==0 && (
                               <div key={index}>
                                 <div className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -109,6 +132,7 @@ function CartCheckout({ cartData, totalAmount, setCartdata }) {
                                           className=" text-center w-8 rounded bg-slate-400"
                                           name="quantity"
                                           type="number"
+                                          // disabled={item?.["quantity"]<=1}
                                           value={item?.["quantity"]}
                                           onChange={(e) =>
                                             handleChange(e, index)
@@ -118,6 +142,7 @@ function CartCheckout({ cartData, totalAmount, setCartdata }) {
                                       <div className="flex">
                                         <button
                                           type="button"
+                                          onClick={(e)=>handlclick(e,index)}
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
                                         >
                                           Remove

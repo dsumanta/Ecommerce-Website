@@ -59,5 +59,9 @@ export const SummeryAPI = {
   addToCartProductView :{
     URL: `${backEndDomain}/api/view-addToCart-product`,
     method: "get",
+  },
+  updateCart :{
+    URL: `${backEndDomain}/api/cartUpdate`,
+    method: "post",
   }
 };

@@ -5,10 +5,13 @@ const updateCart = async (req, res) => {
     const { productId } = req?.body;
     const currentUserId = req?.userId;
     const { quantity } = req?.body;
+   console.log("quantity",quantity)
     const isProductAvailable = await cartModel.find({ productId,userId:currentUserId });
-    console.log("isproductModelAvailable->", isProductAvailable == null);
+  
     if (isProductAvailable.length !== 0) {
-      if(quantity===0){
+      console.log("I am inside quantity")
+      if(quantity==0){
+        console.log("I am inside quantity condition")
          cartModel.deleteOne({productId,userId:currentUserId}).then((result=>{
           res.json({
             message: "Product Deleted from cart",
@@ -23,9 +26,10 @@ const updateCart = async (req, res) => {
           productId: productId,
           userId: currentUserId,
         };
-        const newAddTocart = new cartModel(payLoad);
-        await newAddTocart.updateOne(payLoad,{$set:{quantity:payLoad.quantity}})
+        console.log(payLoad)
+        cartModel.updateOne(payLoad,{$set:{quantity:quantity}})
         .then((data)=>{
+          console.log("update response",data)
           res.json({
             message: "Product Updated to cart",
             data: [],

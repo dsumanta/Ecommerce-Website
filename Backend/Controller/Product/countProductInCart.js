@@ -4,7 +4,6 @@ const countProductInCart = async (req, res) => {
   try {
     const userId = req?.userId;
     const count = await cartModel.countDocuments({ userId: userId });
-    console.log("count->",count)
     res.json({
       data: {
         count: count,
