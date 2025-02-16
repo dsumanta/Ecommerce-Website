@@ -1,9 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DisplayINDCurrency from "../Helper/DisplayINDCurrency";
 import updateCart from "../Helper/updateCart";
 import Context from "../Context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getcartProducts } from "../Helper/getCartProducts";
+import { setCartDetails } from "../store/CartSlice";
 
-function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
+function CartCheckout() {
+  const dispatch= useDispatch()
+  const cartData= useSelector((state)=>state?.cart?.cartDeatils || [])
+  const [cartDetails,setcart] = useState(cartData)
+  const [deatilToUpdateIncart,setDetailsToUpdate]= useState({})
+  const context = useContext(Context)
+  console.log("cartDetailsFromRedux",cartDetails)
+  const fetchProducts=async ()=>{
+    const res=await getcartProducts()
+    console.log("fetch from API",res)
+
+    if(res.length!==0){
+      dispatch(setCartDetails(res))
+      setcart(res)
+    }
+  }
+  useEffect(()=>{
+    fetchProducts()
+  },[])
   const {fetchAddToCartProduct} = useContext(Context);
   console.log("cartDetailsrender",cartDetails)
   const handleChange = async (e, index) => {
@@ -12,39 +33,36 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
     if(name==="quantity" && value<=0){
       return
     }
-    const deatilToUpdateIncart = {
-      productId: cartDetails[index]?._id,
+    const deatilToUpdateIncart1 = {
+      productId: cartDetails?.product?.[index]?._id,
       quantity: value,
     };
-    await updateCart(deatilToUpdateIncart)
-    setCartDetails((prevCartDetails) => {
-      return prevCartDetails.map((item, i) => {
-        if (i === index) {
-          return { ...item, [name]: value };
-        } else {
-          return item;
-        }
-      });
-    });
+    setDetailsToUpdate(deatilToUpdateIncart1)
+    // const handler= setTimeout(async () => {
+    //   await updateCart(deatilToUpdateIncart)
+    // fetchProducts()
+    // }, (500));
+    // return ()=>clearTimeout(handler)
   };
+  useEffect(()=>{
+    if(!deatilToUpdateIncart["productId"]) return
+    const handler= setTimeout(async () => {
+      await updateCart(deatilToUpdateIncart)
+    fetchProducts()
+    }, (500));
+    return ()=>clearTimeout(handler)
+  },[deatilToUpdateIncart])
   const handlclick =async (e,index)=>{
     const productToremove= {
-      productId: cartDetails[index]?._id,
+      productId: cartDetails?.product?.[index]?._id,
       quantity: 0,
     }
 
     await updateCart(productToremove)
     fetchAddToCartProduct()
-    setCartDetails((prevCartDetails) => {
-      return prevCartDetails.map((item, i) => {
-        if (i === index) {
-          return { ...item, ["quantity"]: 0 };
-        } else {
-          return item;
-        }
-      });
-    });
+    fetchProducts()
   }
+  console.log("deatilToUpdateIncart",deatilToUpdateIncart)
   return (
     <div>
       <div
@@ -52,9 +70,10 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
         aria-labelledby="slide-over-title"
         role="dialog"
         aria-modal="true"
+
       >
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity "
           aria-hidden="true"
         ></div>
 
@@ -71,7 +90,7 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
                       >
                         Your Cart
                       </h2>
-                      <div className="ml-3 flex h-7 items-center">
+                      <div className="ml-3 flex h-7 items-center ">
                         <button
                           type="button"
                           className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
@@ -97,7 +116,10 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
                         >
-                          {cartDetails?.map((item, index) => {
+                          {
+                            context?.productCountCart==0 && (<div className="m-10 p-7 text-center text-xl">Your cart is empty</div>)
+                          }
+                          {cartDetails?.product?.map((item, index) => {
                             return item?.["quantity"]!==0 && (
                               <div key={index}>
                                 <div className="flex py-6">
@@ -117,7 +139,7 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
                                         </h3>
                                         <p className="ml-4">
                                           {DisplayINDCurrency(
-                                            item["sellingPrice"]
+                                            item["sellingPrice"] * ((deatilToUpdateIncart["productId"] && deatilToUpdateIncart["productId"]===item["_id"])?deatilToUpdateIncart["quantity"]: item?.["quantity"])
                                           )}
                                         </p>
                                       </div>
@@ -133,7 +155,7 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
                                           name="quantity"
                                           type="number"
                                           // disabled={item?.["quantity"]<=1}
-                                          value={item?.["quantity"]}
+                                          value={ (deatilToUpdateIncart["productId"] && deatilToUpdateIncart["productId"]===item["_id"])?deatilToUpdateIncart["quantity"]: item?.["quantity"]}
                                           onChange={(e) =>
                                             handleChange(e, index)
                                           }
@@ -162,7 +184,7 @@ function CartCheckout({ cartDetails, setCartDetails ,totalAmount}) {
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>{DisplayINDCurrency(totalAmount)}</p>
+                      <p>{DisplayINDCurrency(cartDetails?.totalPrice || 0)}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.

@@ -7,61 +7,59 @@ function Cart() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productDetails, setProductDetails] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
+  // const [totalAmount, setTotalAmount] = useState(0);
   const context = useContext(Context);
-  const [cartUpdate,setCartUpdate]= useState()
+  // const [cartUpdate,setCartUpdate]= useState()
   const cartLoader = new Array(context.productCountCart).fill(null);
-  const fetchData = async () => {
-    console.log("Yes I am")
-    setLoading(true);
-    const response = await fetch(SummeryAPI.addToCartProductView.URL, {
-      method: SummeryAPI.addToCartProductView.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   const response = await fetch(SummeryAPI.addToCartProductView.URL, {
+  //     method: SummeryAPI.addToCartProductView.method,
+  //     credentials: "include",
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //   });
 
-    const responseData = await response.json();
-    if (responseData.success) {
-      let product = [];
-      responseData.data?.map((item) => {
-        fetchProductDetails(item?.["productId"]).then((prod) => {
-          const producrDetails = { ...prod.data, quantity: item["quantity"] };
-          console.log("price inside promise", prod?.data?.sellingPrice);
-          setTotalAmount((prev) => {
-            prev = prev + prod?.data?.sellingPrice;
-            return prev;
-          });
-          product.push(producrDetails);
-        });
-      });
+  //   const responseData = await response.json();
+  //   if (responseData.success) {
+  //     let product = [];
+  //     responseData.data?.map((item) => {
+  //       fetchProductDetails(item?.["productId"]).then((prod) => {
+  //         const producrDetails = { ...prod.data, quantity: item["quantity"] };
+  //         console.log("price inside promise", prod?.data?.sellingPrice);
+  //         setTotalAmount((prev) => {
+  //           prev = prev + prod?.data?.sellingPrice;
+  //           return prev;
+  //         });
+  //         product.push(producrDetails);
+  //       });
+  //     });
 
-      setProductDetails(product);
-      setLoading(false);
-      // setData(responseData.data);
-    }
-  };
-  
- 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  useEffect(() => {
-    fetchData();
-  }, [cartUpdate]);
-  const fetchProductDetails = async (item) => {
-    const res = await fetch(SummeryAPI.productdetails.URL, {
-      method: SummeryAPI.productdetails.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ productId: item }),
-    });
-    const product = await res.json();
-    return product;
-  };
+  //     setProductDetails(product);
+  //     setLoading(false);
+  //     // setData(responseData.data);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [cartUpdate]);
+  // const fetchProductDetails = async (item) => {
+  //   const res = await fetch(SummeryAPI.productdetails.URL, {
+  //     method: SummeryAPI.productdetails.method,
+  //     credentials: "include",
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //     body: JSON.stringify({ productId: item }),
+  //   });
+  //   const product = await res.json();
+  //   return product;
+  // };
 
   return (
     <div className=" container mx-auto flex flex-col lg:flex-row gap-3">
@@ -82,11 +80,7 @@ function Cart() {
           })
         ) : (
           <div>
-            <CartCheckout
-              cartDetails={productDetails}
-              totalAmount={totalAmount}
-              setCartDetails={setProductDetails}
-            />
+            <CartCheckout />
           </div>
         )}
       </div>
