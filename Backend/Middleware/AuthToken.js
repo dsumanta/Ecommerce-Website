@@ -18,6 +18,7 @@ async function AuthToken(req, res, next) {
       console.log("Decoded",decoded); 
       if(err){
         console.log("Error auth",err.message)
+        throw "Session Expired"
       }
       console.log("req->"," decoded-> ",decoded._id)
       req.userId= decoded._id

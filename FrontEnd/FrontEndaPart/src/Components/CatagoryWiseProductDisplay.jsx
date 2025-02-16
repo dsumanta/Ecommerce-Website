@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import GetCatagoryWiseProduct from "../Helper/GetCatagoryWiseProduct";
 import DisplayINDCurrency from "../Helper/DisplayINDCurrency";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Context from "../Context/AuthContext";
+import AddToCart from "../Helper/AddToCart";
 
 const CatagoryWiseProductDisplay = ({ catagory, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const loadingList = new Array(13).fill(null);
+  const {fetchAddToCartProduct} = useContext(Context);
   
   const fetchData = async () => {
     setLoading(true);
@@ -16,6 +19,10 @@ const CatagoryWiseProductDisplay = ({ catagory, heading }) => {
     setData(catagoryPrudct.data);
     setLoading(false);
   };
+  const handleAddToCart= async (e,id)=>{
+       await AddToCart(e,id)
+      fetchAddToCartProduct();
+  }
   useEffect(() => {
     fetchData();
   }, []);
@@ -56,7 +63,7 @@ const CatagoryWiseProductDisplay = ({ catagory, heading }) => {
                       {DisplayINDCurrency(product.price)}
                     </p>
                   </div>
-                  <button className=" text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full">
+                  <button onClick={(e)=>handleAddToCart(e,product._id)} className=" text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full">
                     Add To Cart
                   </button>
                 </div>

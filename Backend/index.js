@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
 app.use(cookieParser())
 app.use('/api',router)
-
 const PORT = 8080 || process.env.PORT;
 connectDB().then(() => {
   console.log("connted to DB");

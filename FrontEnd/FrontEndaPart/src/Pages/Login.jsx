@@ -9,7 +9,7 @@ import Context from "../Context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate()
-  const {fecthUserDetails} = useContext(Context)
+  const {fecthUserDetails,fetchAddToCartProduct} = useContext(Context)
   
   const [showPassword, setShowPassword] = useState(false);
   const [data,setData] = useState({
@@ -45,6 +45,7 @@ const Login = () => {
         toast.success(dataApi.message)
         navigate('/')
         fecthUserDetails()
+        fetchAddToCartProduct()
        }
        if(dataApi.Error){
         toast.error(dataApi.message)
