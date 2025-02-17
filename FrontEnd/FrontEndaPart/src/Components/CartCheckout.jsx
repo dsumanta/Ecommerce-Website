@@ -5,64 +5,67 @@ import Context from "../Context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getcartProducts } from "../Helper/getCartProducts";
 import { setCartDetails } from "../store/CartSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 function CartCheckout() {
-  const dispatch= useDispatch()
-  const cartData= useSelector((state)=>state?.cart?.cartDeatils || [])
-  const [cartDetails,setcart] = useState(cartData)
-  const [deatilToUpdateIncart,setDetailsToUpdate]= useState({})
-  const context = useContext(Context)
-  console.log("cartDetailsFromRedux",cartDetails)
-  const fetchProducts=async ()=>{
-    const res=await getcartProducts()
-    console.log("fetch from API",res)
+  const dispatch = useDispatch();
+  const cartData = useSelector((state) => state?.cart?.cartDeatils || []);
+  const [cartDetails, setcart] = useState(cartData);
+  const [deatilToUpdateIncart, setDetailsToUpdate] = useState({});
+  const navigate= useNavigate()
 
-    if(res.length!==0){
-      dispatch(setCartDetails(res))
-      setcart(res)
+  const context = useContext(Context);
+  console.log("cartDetailsFromRedux", cartDetails);
+  const fetchProducts = async () => {
+    const res = await getcartProducts();
+    console.log("fetch from API", res);
+
+    if (res.length !== 0) {
+      dispatch(setCartDetails(res));
+      setcart(res);
     }
-  }
-  useEffect(()=>{
-    fetchProducts()
-  },[])
-  const {fetchAddToCartProduct} = useContext(Context);
-  console.log("cartDetailsrender",cartDetails)
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  const { fetchAddToCartProduct } = useContext(Context);
+  console.log("cartDetailsrender", cartDetails);
   const handleChange = async (e, index) => {
     // Add index parameter
-    const { name, value } = e.target; 
-    if(name==="quantity" && value<=0){
-      return
+    const { name, value } = e.target;
+    if (name === "quantity" && value <= 0) {
+      return;
     }
     const deatilToUpdateIncart1 = {
       productId: cartDetails?.product?.[index]?._id,
       quantity: value,
     };
-    setDetailsToUpdate(deatilToUpdateIncart1)
+    setDetailsToUpdate(deatilToUpdateIncart1);
     // const handler= setTimeout(async () => {
     //   await updateCart(deatilToUpdateIncart)
     // fetchProducts()
     // }, (500));
     // return ()=>clearTimeout(handler)
   };
-  useEffect(()=>{
-    if(!deatilToUpdateIncart["productId"]) return
-    const handler= setTimeout(async () => {
-      await updateCart(deatilToUpdateIncart)
-    fetchProducts()
-    }, (500));
-    return ()=>clearTimeout(handler)
-  },[deatilToUpdateIncart])
-  const handlclick =async (e,index)=>{
-    const productToremove= {
+  useEffect(() => {
+    if (!deatilToUpdateIncart["productId"]) return;
+    const handler = setTimeout(async () => {
+      await updateCart(deatilToUpdateIncart);
+      fetchProducts();
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [deatilToUpdateIncart]);
+  const handlclick = async (e, index) => {
+    const productToremove = {
       productId: cartDetails?.product?.[index]?._id,
       quantity: 0,
-    }
+    };
 
-    await updateCart(productToremove)
-    fetchAddToCartProduct()
-    fetchProducts()
-  }
-  console.log("deatilToUpdateIncart",deatilToUpdateIncart)
+    await updateCart(productToremove);
+    fetchAddToCartProduct();
+    fetchProducts();
+  };
+  console.log("deatilToUpdateIncart", deatilToUpdateIncart);
   return (
     <div>
       <div
@@ -70,7 +73,6 @@ function CartCheckout() {
         aria-labelledby="slide-over-title"
         role="dialog"
         aria-modal="true"
-
       >
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity "
@@ -116,64 +118,93 @@ function CartCheckout() {
                           role="list"
                           className="-my-6 divide-y divide-gray-200"
                         >
-                          {
-                            context?.productCountCart==0 && (<div className="m-10 p-7 text-center text-xl">Your cart is empty</div>)
-                          }
+                          {context?.productCountCart == 0 && (
+                            <div className="m-10 p-7 text-center text-xl">
+                              Your cart is empty
+                            </div>
+                          )}
                           {cartDetails?.product?.map((item, index) => {
-                            return item?.["quantity"]!==0 && (
-                              <div key={index}>
-                                <div className="flex py-6">
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img
-                                      src={item["productImage"]?.[0]}
-                                      alt={item["desription"]}
-                                      className="h-full w-full object-cente object-scale-down mix-blend-multiply"
-                                    />
-                                  </div>
+                            return (
+                              item?.["quantity"] !== 0 && (
+                                <div key={index}>
+                                  <div className="flex py-6">
+                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                      <img
+                                        src={item["productImage"]?.[0]}
+                                        alt={item["desription"]}
+                                        className="h-full w-full object-cente object-scale-down mix-blend-multiply"
+                                      />
+                                    </div>
 
-                                  <div className="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                      <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <h3>
-                                          <a href="#">{item["productName"]}</a>
-                                        </h3>
-                                        <p className="ml-4">
-                                          {DisplayINDCurrency(
-                                            item["sellingPrice"] * ((deatilToUpdateIncart["productId"] && deatilToUpdateIncart["productId"]===item["_id"])?deatilToUpdateIncart["quantity"]: item?.["quantity"])
-                                          )}
+                                    <div className="ml-4 flex flex-1 flex-col">
+                                      <div>
+                                        <div className="flex justify-between text-base font-medium text-gray-900">
+                                          <h3>
+                                            <a href="#">
+                                              {item["productName"]}
+                                            </a>
+                                          </h3>
+                                          <p className="ml-4">
+                                            {DisplayINDCurrency(
+                                              item["sellingPrice"] *
+                                                (deatilToUpdateIncart[
+                                                  "productId"
+                                                ] &&
+                                                deatilToUpdateIncart[
+                                                  "productId"
+                                                ] === item["_id"]
+                                                  ? deatilToUpdateIncart[
+                                                      "quantity"
+                                                    ]
+                                                  : item?.["quantity"])
+                                            )}
+                                          </p>
+                                        </div>
+                                        <p className="mt-1 text-sm text-gray-500">
+                                          {item["catagory"]}
                                         </p>
                                       </div>
-                                      <p className="mt-1 text-sm text-gray-500">
-                                        {item["catagory"]}
-                                      </p>
-                                    </div>
-                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                      <div className=" flex gap-2">
-                                        <label>Qty</label>
-                                        <input
-                                          className=" text-center w-8 rounded bg-slate-400"
-                                          name="quantity"
-                                          type="number"
-                                          // disabled={item?.["quantity"]<=1}
-                                          value={ (deatilToUpdateIncart["productId"] && deatilToUpdateIncart["productId"]===item["_id"])?deatilToUpdateIncart["quantity"]: item?.["quantity"]}
-                                          onChange={(e) =>
-                                            handleChange(e, index)
-                                          }
-                                        />
-                                      </div>
-                                      <div className="flex">
-                                        <button
-                                          type="button"
-                                          onClick={(e)=>handlclick(e,index)}
-                                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                                        >
-                                          Remove
-                                        </button>
+                                      <div className="flex flex-1 items-end justify-between text-sm">
+                                        <div className=" flex gap-2">
+                                          <label>Qty</label>
+                                          <input
+                                            className=" text-center w-8 rounded bg-slate-400"
+                                            name="quantity"
+                                            type="number"
+                                            // disabled={item?.["quantity"]<=1}
+                                            value={
+                                              deatilToUpdateIncart[
+                                                "productId"
+                                              ] &&
+                                              deatilToUpdateIncart[
+                                                "productId"
+                                              ] === item["_id"]
+                                                ? deatilToUpdateIncart[
+                                                    "quantity"
+                                                  ]
+                                                : item?.["quantity"]
+                                            }
+                                            onChange={(e) =>
+                                              handleChange(e, index)
+                                            }
+                                          />
+                                        </div>
+                                        <div className="flex">
+                                          <button
+                                            type="button"
+                                            onClick={(e) =>
+                                              handlclick(e, index)
+                                            }
+                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              )
                             );
                           })}
                         </div>
@@ -189,13 +220,8 @@ function CartCheckout() {
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
-                    <div className="mt-6">
-                      <a
-                        href="#"
-                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                      >
-                        Checkout
-                      </a>
+                    <div onClick={()=>navigate('/summary')} className="mt-6 cursor-pointer flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+                         checkout
                     </div>
                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>

@@ -16,9 +16,12 @@ const catagoryWiseProduct = require("../Controller/Product/getCatagoryWiseProduc
 const getProductDetails = require("../Controller/Product/getProductDetails");
 const addToCart = require("../Controller/Product/addToCart");
 const countProductInCart = require("../Controller/Product/countProductInCart");
-const  addToCartView  = require("../Controller/User/addToCartView");
+const addToCartView = require("../Controller/User/addToCartView");
 const addToCartUpdate = require("../Controller/User/addToCartUpdate");
 const updateCart = require("../Controller/Product/updateCart");
+const { paymentCapture } = require("../Controller/payment/paymentcaptured");
+const { createPaymentOrderId } = require("../Controller/payment/createOrder");
+const { createRefund } = require("../Controller/payment/refund");
 
 //user routes
 router.post("/signUp", userSignUpController);
@@ -27,17 +30,22 @@ router.get("/user-details", AuthToken, userDetailsController);
 router.get("/userLogout", userLogout);
 router.get("/all-user", AuthToken, allUser);
 router.post("/update-user", AuthToken, updateUser);
-router.get("/view-addToCart-product",AuthToken,addToCartView)
-router.post("/updateCartProducts",AuthToken,addToCartUpdate)
+router.get("/view-addToCart-product", AuthToken, addToCartView);
+router.post("/updateCartProducts", AuthToken, addToCartUpdate);
 
 // product routes
 router.post("/upload-product", AuthToken, uploadProductController);
 router.get("/get-product", getProductController);
 router.post("/update-product", AuthToken, updateProductController);
-router.get("/get-productCatagory",productCatagory)
-router.post("/catagoryWise-product",catagoryWiseProduct)
-router.post("/product-details",getProductDetails)
-router.post("/addToacrt",AuthToken,addToCart)
-router.get("/countProductIncart",AuthToken,countProductInCart)
-router.post("/cartUpdate",AuthToken,updateCart)  
+router.get("/get-productCatagory", productCatagory);
+router.post("/catagoryWise-product", catagoryWiseProduct);
+router.post("/product-details", getProductDetails);
+router.post("/addToacrt", AuthToken, addToCart);
+router.get("/countProductIncart", AuthToken, countProductInCart);
+router.post("/cartUpdate", AuthToken, updateCart);
 module.exports = router;
+
+// payment routes
+router.post("/paymentCapture", AuthToken, paymentCapture);
+router.post("/createPaymentOrder", AuthToken, createPaymentOrderId);
+router.post("/createRefund", AuthToken, createRefund);
