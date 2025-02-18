@@ -5,7 +5,7 @@ const addToCart = async (req, res) => {
     const { productId } = req?.body;
     const currentUserId = req?.userId;
 
-    const isProductAvailable = await cartModel.find({ productId });
+    const isProductAvailable = await cartModel.find({ productId,userId:currentUserId });
     console.log("isproductModelAvailable->", isProductAvailable == null);
     if (isProductAvailable.length !== 0) {
       return res.json({
