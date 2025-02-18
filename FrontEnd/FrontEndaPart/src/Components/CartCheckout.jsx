@@ -220,18 +220,19 @@ function CartCheckout() {
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
-                    <div onClick={()=>navigate('/summary')} className="mt-6 cursor-pointer flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
-                         checkout
+                    <div onClick={()=> context?.productCountCart !==0? navigate('/summary'):navigate("/")} className="mt-6 cursor-pointer flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+                         {context?.productCountCart == 0?"Explore product":"Checkout"}
                     </div>
                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>
-                        or
+                      {context?.productCountCart == 0?"":"Or"}
                         <button
                           type="button"
+                          onClick={()=>navigate("/")}
                           className="font-medium text-indigo-600 hover:text-indigo-500"
                         >
-                          Continue Shopping
-                          <span aria-hidden="true"> &rarr;</span>
+                          {context?.productCountCart == 0?"":"Checkout"}
+                          {context?.productCountCart !== 0 && (<span aria-hidden="true"> &rarr;</span>)}
                         </button>
                       </p>
                     </div>

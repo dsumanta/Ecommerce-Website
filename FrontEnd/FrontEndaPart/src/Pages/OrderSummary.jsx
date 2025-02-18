@@ -2,13 +2,18 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import DisplayINDCurrency from "../Helper/DisplayINDCurrency";
 import { FiDivideCircle } from "react-icons/fi";
+import { forMatDate } from "../Common/utils";
 
 export const OrderSummary = () => {
   const location = useLocation();
   const orderId = location.state?.orderId;
   const paymentId = location.state?.paymentId;
+  
+  const date = forMatDate(new Date()); // Or a specific date: new Date('2025-02-18');
+  console.log("date",date)
   const Navigate = useNavigate();
   const cartData = useSelector((state) => state?.cart?.cartDeatils || []);
+  
   console.log("orderId", orderId);
   console.log("paymentd", paymentId);
   return (
@@ -25,13 +30,13 @@ export const OrderSummary = () => {
             <div className="data">
               <p className="font-semibold text-base leading-7 text-black">
                 Order Id:{" "}
-                <span className="text-indigo-600 font-medium">#{orderId}</span>
+                <span className="text-indigo-600 font-medium">#{orderId.slice(6)}</span>
               </p>
               <p className="font-semibold text-base leading-7 text-black mt-4">
                 Order Payment :{" "}
                 <span className="text-gray-400 font-medium">
                   {" "}
-                  18th march 2021
+                  {date}
                 </span>
               </p>
             </div>
@@ -146,7 +151,7 @@ export const OrderSummary = () => {
             <p className="font-semibold text-lg text-black py-6">
               Total Price:{" "}
               <span className="text-indigo-600">
-                {DisplayINDCurrency(cartData?.totalPrice)}
+                {DisplayINDCurrency(cartData?.totalPrice || 0)}
               </span>
             </p>
           </div>
