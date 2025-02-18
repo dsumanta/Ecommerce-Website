@@ -1,0 +1,27 @@
+node_modules
+.env
+.env.example  # Or .env.template
+package-lock.json # Consider keeping, but can be regenerated
+yarn.lock       # Consider keeping, but can be regenerated
+*.log
+*.swp
+*~
+.DS_Store
+Thumbs.db
+coverage/
+.nyc_output/
+test-reports/
+.idea/
+.vscode/
+.history
+build/
+dist/
+out/
+*.zip
+*.tar.gz
+*.tgz
+*.jar
+*.war
+*.egg-info
+.cache
+*.tmp

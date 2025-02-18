@@ -1,21 +1,17 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-// const orderSchema = new mongoose.Schema({
-//     userId:String,
-//     quantity:Number,
-//     productId:String,
-// },{timestamps:true})
+const orderedProductSchema = new mongoose.Schema({ // Note: _Schema suffix
+    productId: String,
+    quantity: Number,
+    price:Number
+}, { _id: false }); // Important: Prevent Mongoose from creating _id for subdocuments
 
-const orderedProduct= new mongoose.Schema({
-    productId:String,
-    quantity:Number,
-})
+const orderSchema = new mongoose.Schema({
+    userId: String,
+    orderId: String,
+    products: [orderedProductSchema], // Use the schema directly, not an instance
+}, { timestamps: true });
 
-const orderSchema= new mongoose.Schema({
-    userId:String,
-    product:[orderedProduct]
-})
+const orderModel = mongoose.model("orderModel", orderSchema);
 
-const orderModel= mongoose.model("orderModel",orderSchema)
-
-module.exports= orderModel
+module.exports = orderModel;
