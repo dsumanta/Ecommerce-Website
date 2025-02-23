@@ -1,45 +1,25 @@
-version: '3'
-
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db  # MongoDB data persistence
-    networks:
-      - app-network
-
-  backend:
+  slackfrontend:
     build:
-      context: ./backend
-    container_name: backend
+      context: ./FrontEnd
+      dockerfile: Dockerfile.reactUI
+    ports:
+      - "5173:5173"
+    depends_on:
+      - nodebackend
+  nodebackend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.node
     ports:
       - "8080:8080"
     depends_on:
-      - mongo
+      - db
+  db:
     volumes:
-      - ./backend:/app  # Mount backend code for live updates
-    networks:
-      - app-network
-
-
-  frontend:
-    build:
-      context: ./frontend/FrontEndaPart
-    container_name: frontend
+      - slack_db:/data/db
+    image: mongo:latest
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend/FrontEndaPart:/app  # Mount frontend code for live updates
-    networks:
-      - app-network
-
+      - "27017:27017"
 volumes:
-  mongo-data:
-    driver: local  # Persistent MongoDB data storage
-
-networks:
-  app-network:
-    driver: bridge
+  slack_db:
