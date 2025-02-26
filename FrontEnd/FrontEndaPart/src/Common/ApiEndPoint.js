@@ -63,5 +63,17 @@ export const SummeryAPI = {
   updateCart :{
     URL: `${backEndDomain}/api/cartUpdate`,
     method: "post",
+  },
+  createOrder :{
+    URL: `${backEndDomain}/api/createPaymentOrder`,
+    method: "post",
+  },
+  paymentcapture :{
+    URL: `${backEndDomain}/api/paymentCapture`,
+    method: "post",
+  },
+  refund :{
+    URL: `${backEndDomain}/api/createRefund`,
+    method: "post",
   }
 };

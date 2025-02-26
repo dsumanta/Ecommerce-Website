@@ -10,6 +10,8 @@ import AllProducts from '../Pages/AllProducts'
 import CatagoryProduct from '../Pages/CatagoryProduct'
 import ProductDetails from '../Pages/ProductDetails'
 import Cart from '../Pages/Cart'
+import { SummaryPage } from '../Pages/Summary'
+import { OrderSummary } from '../Pages/OrderSummary'
 
 const routes = createBrowserRouter([
     {
@@ -30,7 +32,11 @@ const routes = createBrowserRouter([
             },
             {
                  path:'cart',
-                 element:<Cart/>
+                 element:<Cart/>,
+            },
+            {
+                path:'summary',
+                element:<SummaryPage/>
             },
             {
                 path:'sign-up',
@@ -43,6 +49,10 @@ const routes = createBrowserRouter([
             {
                path:'product/:id',
                element:<ProductDetails/>
+            },
+            {
+                path:'order-summary',
+                element:<OrderSummary/>
             },
             {
                 path:'admin-pannel',
