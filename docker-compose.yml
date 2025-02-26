@@ -3,16 +3,28 @@ services:
     build:
       context: ./FrontEnd
       dockerfile: Dockerfile.reactUI
+    image: dsumanta/ecommerce:frontend
     ports:
       - "5173:5173"
+    volumes:
+      - ./FrontEnd:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - nodebackend
   nodebackend:
     build:
       context: ./Backend
       dockerfile: Dockerfile.node
+    image: dsumanta/ecommerce:backend
     ports:
       - "8080:8080"
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - db
   db:
