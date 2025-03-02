@@ -22,7 +22,7 @@ function App() {
       },
     });
     const dataAPI = await dataResponse.json();
-    console.log(dataAPI);
+    console.log("userDetails",dataAPI);
     if (dataAPI.success) {
       dispatch(setUserDetails(dataAPI.data));
     }

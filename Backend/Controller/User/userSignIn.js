@@ -24,7 +24,8 @@ async function userSignInController(req, res) {
       };
       const tokenOption = {
         httpOnly: true,
-        secure: true,
+        secure: false,
+        maxAge: 3600000
       };
       const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, {
         expiresIn: "1h",
