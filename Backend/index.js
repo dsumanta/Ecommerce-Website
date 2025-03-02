@@ -9,7 +9,7 @@ const router = require("./Router/index");
 
 const app = express();
 app.use(cors({
-  origin:process.env.FRONTEND_URL,
+  origin:[process.env.FRONTEND_URL,"https://ecommerce-website-1-pn90.onrender.com"],
   credentials:true
 }));
 app.use(bodyParser.json({limit: '50mb'}));
