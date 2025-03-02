@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => {
         return prev
       }, {}),
     },
-    plugins: [react()]
+    plugins: [react()],
+    // server: {
+    //   allowedHosts: ['ecommerce-frontend-muio.onrender.com']
+    // },
   }
 })
 

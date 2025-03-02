@@ -1,4 +1,5 @@
-const backEndDomain = "http://localhost:8080";
+// const backEndDomain = "http://localhost:8080"; // nee to uncomment when you want deploy it in docker
+const backEndDomain = "https://ecommerce-website-5ggy.onrender.com";// nee to comment out when you want deploy it in docker
 export const SummeryAPI = {
   signUp: {
     URL: `${backEndDomain}/api/signUp`,
