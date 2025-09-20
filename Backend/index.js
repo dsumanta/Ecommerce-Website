@@ -21,19 +21,36 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  console.log('HIT THE ROUTE!', req.get('origin'));
+  res.json({ count: 5 });
+});
+
+
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL,
-    "https://flebix.store",
-    "https://www.flebix.store",
-    "https://ecommerce-website-1-pn90.onrender.com"
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://flebix.store",
+      "https://www.flebix.store",
+      "https://ecommerce-website-1-pn90.onrender.com"
+    ];
+    
+    // Allow requests with no origin (like mobile apps, Postman, direct server access)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
 
-app.options('*', cors());
+
+// app.options('*', cors());
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
