@@ -16,16 +16,6 @@ const app = express();
 //   next();
 // });
 // Add this middleware at the very top of your routes
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url} from ${req.get('origin')}`);
-  next();
-});
-
-app.get('/', (req, res) => {
-  console.log('HIT THE ROUTE!', req.get('origin'));
-  res.json({ count: 5 });
-});
-
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -50,7 +40,18 @@ app.use(cors({
 }));
 
 
-// app.options('*', cors());
+app.options('*', cors());
+
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url} from ${req.get('origin')}`);
+  next();
+});
+
+// 4. LAST - Your routes
+app.get('/', (req, res) => {
+  console.log('HIT THE ROOT ROUTE!', req.get('origin'));
+  res.json({ count: 5 });
+});
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
