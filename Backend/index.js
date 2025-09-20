@@ -16,6 +16,8 @@ const app = express();
 //   next();
 // });
 // Add this middleware at the very top of your routes
+app.set('strict routing', true);
+app.set('case sensitive routing', true);
 
 const corsOptions = {
   origin: (origin, callback) => {
