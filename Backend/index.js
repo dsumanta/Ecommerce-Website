@@ -17,7 +17,7 @@ const app = express();
 // });
 // Add this middleware at the very top of your routes
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
       "https://flebix.store",
@@ -25,7 +25,6 @@ app.use(cors({
       "https://ecommerce-website-1-pn90.onrender.com"
     ];
     
-    // Allow requests with no origin (like mobile apps, Postman, direct server access)
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.includes(origin)) {
@@ -37,10 +36,18 @@ app.use(cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
-}));
+};
 
+app.use(cors(corsOptions));
 
-app.options('*', cors());
+app.options('*', (req, res) => {
+  console.log('OPTIONS request received for:', req.url, 'from:', req.get('origin'));
+  res.header('Access-Control-Allow-Origin', req.get('origin') || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.sendStatus(200);
+});
 
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url} from ${req.get('origin')}`);
