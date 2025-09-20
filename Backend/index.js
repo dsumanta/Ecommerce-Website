@@ -15,6 +15,12 @@ const app = express();
 //   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 //   next();
 // });
+// Add this middleware at the very top of your routes
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url} from ${req.get('origin')}`);
+  next();
+});
+
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL,
@@ -26,6 +32,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
+
+app.options('*', cors());git 
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
