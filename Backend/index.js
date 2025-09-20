@@ -8,18 +8,18 @@ const connectDB = require("./Config/db");
 const router = require("./Router/index");
 
 const app = express();
-app.options('*', cors({
-  origin: [
-    process.env.FRONTEND_URL,
-    "https://flebix.store", 
-    "https://ecommerce-website-1-pn90.onrender.com"
-  ],
-  credentials: true
-}));
-app.use(cors({
-  origin:[process.env.FRONTEND_URL,"https://flebix.store","https://ecommerce-website-1-pn90.onrender.com"],
-  credentials:true
-}));
+// app.options('*', cors({
+//   origin: [
+//     process.env.FRONTEND_URL,
+//     "https://flebix.store", 
+//     "https://ecommerce-website-1-pn90.onrender.com"
+//   ],
+//   credentials: true
+// }));
+// app.use(cors({
+//   origin:[process.env.FRONTEND_URL,"https://flebix.store","https://ecommerce-website-1-pn90.onrender.com"],
+//   credentials:true
+// }));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
